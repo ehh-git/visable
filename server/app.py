@@ -12,6 +12,58 @@ client = OpenAI()
 app = Flask(__name__)
 CORS(app)  # This will allow requests from any origin
 
+import re
+
+@app.route("/contrast", methods=["POST"])
+def adjust_contrast():
+    data = request.get_json()
+    color_values = data.get("color_values")
+
+    if not color_values:
+        return jsonify({"error": "No color values provided"}), 400
+
+    try:
+        # Prepare the prompt
+        prompt = (
+            f"This is the list of all RGB values used on a website in the order that it was used: {color_values}, "
+            "make sure that any two RGB values next to each other (or just in general) are contrasted enough to comply with the ADA regulations for accessibility. "
+            "Return only a hashmap of the RGB values that need to be changed as the key and respective RGB values that are contrasted enough as the values and nothing else. "
+            "Provide the hashmap as a valid JSON object without any code formatting or additional text."
+        )
+
+        # Use the OpenAI API to generate the color map
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt,
+                }
+            ],
+        )
+        content = response.choices[0].message.content.strip()
+        print("API Response:", content)
+
+        # Extract JSON object from the response
+        json_match = re.search(r'\{.*\}', content, re.DOTALL)
+        if json_match:
+            json_content = json_match.group(0)
+            # Attempt to parse the JSON content
+            import json
+            color_map = json.loads(json_content)
+            return jsonify({"color_map": color_map})
+        else:
+            return jsonify({"error": "No JSON object found in AI response"}), 500
+
+    except json.JSONDecodeError as json_error:
+        print("JSON parsing error:", json_error)
+        return jsonify({"error": "Failed to parse JSON from AI response"}), 500
+    except Exception as e:
+        print(e)
+        return jsonify({"error": str(e)}), 500
+
+
+
 @app.route("/generate-subtext", methods=["POST"])
 def generate_subtext():
     data = request.get_json()

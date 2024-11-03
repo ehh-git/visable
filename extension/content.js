@@ -2,6 +2,70 @@
 
 // Function Definitions
 // --------------------
+function adjustColorContrast() {
+  // Collect all color values
+  const colorValues = [];
+
+  // Select all elements in the document
+  const allElements = document.querySelectorAll("*");
+
+  allElements.forEach((element) => {
+    // Get the computed style of each element
+    const computedStyle = window.getComputedStyle(element);
+    const textColor = computedStyle.color;
+    const backgroundColor = computedStyle.backgroundColor;
+
+    // Add color values to the list if they aren't already there
+    if (textColor && !colorValues.includes(textColor)) {
+      colorValues.push(textColor);
+    }
+    if (backgroundColor && !colorValues.includes(backgroundColor)) {
+      colorValues.push(backgroundColor);
+    }
+  });
+
+  // Send colorValues to the server
+  fetch("http://127.0.0.1:5000/contrast", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ color_values: colorValues }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.color_map) {
+        // Use the color_map to replace colors on the page
+        replaceColorsOnPage(data.color_map);
+      } else {
+        console.error("Error from server:", data.error);
+      }
+    })
+    .catch((error) => console.error("Fetch error:", error));
+}
+
+function replaceColorsOnPage(colorMap) {
+  // Select all elements in the document
+  const allElements = document.querySelectorAll("*");
+
+  allElements.forEach((element) => {
+    // Get the computed style of each element
+    const computedStyle = window.getComputedStyle(element);
+    const textColor = computedStyle.color;
+    const backgroundColor = computedStyle.backgroundColor;
+
+    // Check if the color or background color matches any key in the colorMap and replace if so
+    if (colorMap[textColor]) {
+      element.style.color = colorMap[textColor];
+    }
+    if (colorMap[backgroundColor]) {
+      element.style.backgroundColor = colorMap[backgroundColor];
+    }
+  });
+
+  console.log("Colors adjusted based on color map.");
+}
+
 function changeFontToTimesNewRoman() {
   chrome.storage.sync.get('changeFont', function(items) {
     if (items.changeFont !== false) {
@@ -82,6 +146,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         }
         if (items.changeFont !== false) {
           changeFontToTimesNewRoman();
+        }
+        if (items.adjustColors !== false) {
+          adjustColorContrast();
         }
         // Include other functions as needed
       }

@@ -3,12 +3,13 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Restore saved settings
   chrome.storage.sync.get(
-    ['optimizeImages', 'simplifyText', 'increaseFontSize', 'changeFont', 'optimizeImagesDetail', 'simplifyTextDetail'],
+    ['optimizeImages', 'simplifyText', 'increaseFontSize', 'changeFont', 'adjustColors', 'optimizeImagesDetail', 'simplifyTextDetail'],
     (data) => {
       document.getElementById('optimizeImages').checked = data.optimizeImages !== false;
       document.getElementById('simplifyText').checked = data.simplifyText !== false;
       document.getElementById('increaseFontSize').checked = data.increaseFontSize !== false;
       document.getElementById('changeFont').checked = data.changeFont !== false;
+      document.getElementById('adjustColors').checked = data.adjustColors !== false;
 
       // Restore detail level selections for optimizeImages
       const optimizeImagesDetail = data.optimizeImagesDetail || 'medium';
@@ -30,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         changeFont: document.getElementById('changeFont').checked,
         optimizeImagesDetail: document.querySelector('input[name="optimizeImagesDetail"]:checked').value,
         simplifyTextDetail: document.querySelector('input[name="simplifyTextDetail"]:checked').value,
+        adjustColors: document.getElementById('adjustColors').checked,
       });
     });
   });
