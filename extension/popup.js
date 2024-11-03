@@ -83,60 +83,6 @@ function increaseFontSize() {
 // Event Listeners
 // ---------------
 
-// Event listener for "Summarize" button
-document.getElementById("summarizeButton").addEventListener("click", () => {
-  console.log("Summarize button clicked");
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { action: "summarizeContent" });
-  });
-});
-
-// Event listener for "Test GPT" button
-document.getElementById("testGptButton").addEventListener("click", () => {
-  console.log("Test GPT button clicked");
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { action: "gptTest" });
-  });
-});
-
-// Event listener for "Generate Subtext" button
-document.getElementById("generateSubtextButton").addEventListener("click", () => {
-  console.log("Generate Subtext button clicked");
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { action: "generateSubtext" });
-  });
-});
-
-// Event listener for "Perform Action" button
-document.getElementById("stripHtmlCSS").addEventListener("click", () => {
-  console.log("Strip HTML and CSS button clicked");
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.scripting.executeScript({
-      target: { tabId: tabs[0].id },
-      function: displayRawHTMLAndCSS,
-    });
-  });
-});
-
-// Event listener for "Increase Font Size" button
-document.getElementById("increaseFontSizeButton").addEventListener("click", () => {
-  console.log("Increase Font Size button clicked");
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { action: "increaseFontSize" });
-  });
-});
-
-// Event listener for "Replace Images" button (if you have one)
-document.getElementById("replaceImagesButton")?.addEventListener("click", () => {
-  console.log("Replace Images button clicked");
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.scripting.executeScript({
-      target: { tabId: tabs[0].id },
-      function: replaceImagesOnPage,
-    });
-  });
-});
-
 // super button
 document.getElementById("activateAccessibility").addEventListener("click", () => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {

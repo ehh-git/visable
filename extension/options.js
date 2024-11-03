@@ -3,11 +3,12 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Restore saved settings
   chrome.storage.sync.get(
-    ['optimizeImages', 'simplifyText', 'increaseFontSize', 'optimizeImagesDetail', 'simplifyTextDetail'],
+    ['optimizeImages', 'simplifyText', 'increaseFontSize', 'changeFont', 'optimizeImagesDetail', 'simplifyTextDetail'],
     (data) => {
       document.getElementById('optimizeImages').checked = data.optimizeImages !== false;
       document.getElementById('simplifyText').checked = data.simplifyText !== false;
       document.getElementById('increaseFontSize').checked = data.increaseFontSize !== false;
+      document.getElementById('changeFont').checked = data.changeFont !== false;
 
       // Restore detail level selections for optimizeImages
       const optimizeImagesDetail = data.optimizeImagesDetail || 'medium';
@@ -16,9 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
       // Restore detail level selections for simplifyText
       const simplifyTextDetail = data.simplifyTextDetail || 'medium';
       document.querySelector(`input[name="simplifyTextDetail"][value="${simplifyTextDetail}"]`).checked = true;
-
-      // Initial toggle to hide detail options if checkboxes are not checked
-      toggleDetailOptions();
     }
   );
 
@@ -29,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         optimizeImages: document.getElementById('optimizeImages').checked,
         simplifyText: document.getElementById('simplifyText').checked,
         increaseFontSize: document.getElementById('increaseFontSize').checked,
+        changeFont: document.getElementById('changeFont').checked,
         optimizeImagesDetail: document.querySelector('input[name="optimizeImagesDetail"]:checked').value,
         simplifyTextDetail: document.querySelector('input[name="simplifyTextDetail"]:checked').value,
       });
@@ -39,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function toggleDetailOptions() {
     document.getElementById('optimizeImagesDetail').style.display = document.getElementById('optimizeImages').checked ? 'block' : 'none';
     document.getElementById('simplifyTextDetail').style.display = document.getElementById('simplifyText').checked ? 'block' : 'none';
-    // Removed increaseFontSizeDetail toggling since there are no detail options
+    // No detail options for increaseFontSize and changeFont
   }
 
   // Initial toggle
@@ -48,5 +47,5 @@ document.addEventListener('DOMContentLoaded', () => {
   // Add event listeners to checkboxes
   document.getElementById('optimizeImages').addEventListener('change', toggleDetailOptions);
   document.getElementById('simplifyText').addEventListener('change', toggleDetailOptions);
-  // No need to add an event listener for increaseFontSize since it has no detail options
+  // No need to add an event listener for increaseFontSize and changeFont since they have no detail options
 });
