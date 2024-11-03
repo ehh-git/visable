@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Restore saved settings
   chrome.storage.sync.get(
-    ['optimizeImages', 'simplifyText', 'increaseFontSize', 'changeFont', 'optimizeImagesDetail', 'simplifyTextDetail', 'highContrast'],
+    ['optimizeImages', 'simplifyText', 'increaseFontSize', 'changeFont', 'optimizeImagesDetail', 'simplifyTextDetail', 'highContrast', 'optimizeBtns',]
     (data) => {
       document.getElementById('optimizeImages').checked = data.optimizeImages !== false;
       document.getElementById('simplifyText').checked = data.simplifyText !== false;
