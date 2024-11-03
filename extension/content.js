@@ -2,6 +2,92 @@
 
 // Function Definitions
 // --------------------
+
+// COLOR CHANGING
+// Function to adjust color contrast
+function adjustColorContrast() {
+  // Minimum contrast ratio as per WCAG guidelines
+  const MIN_CONTRAST_RATIO = 4.5;
+
+  // Select all elements in the document
+  const allElements = document.querySelectorAll("*");
+
+  allElements.forEach((element) => {
+    // Get computed styles
+    const computedStyle = window.getComputedStyle(element);
+    const textColor = computedStyle.color;
+    const backgroundColor = computedStyle.backgroundColor;
+
+    // Convert colors to RGB arrays
+    const textRGB = getRGBValues(textColor);
+    const bgRGB = getRGBValues(backgroundColor);
+
+    if (textRGB && bgRGB) {
+      // Calculate contrast ratio
+      const contrastRatio = getContrastRatio(textRGB, bgRGB);
+
+      if (contrastRatio < MIN_CONTRAST_RATIO) {
+        // Adjust text color to improve contrast
+        const adjustedTextColor = adjustColor(textRGB, bgRGB, MIN_CONTRAST_RATIO);
+        element.style.color = `rgb(${adjustedTextColor.join(",")})`;
+        console.log(`Adjusted color for element:`, element);
+      }
+    }
+  });
+
+  console.log("Color contrast adjusted on the page.");
+}
+
+// Helper function to parse RGB values from CSS color string
+function getRGBValues(color) {
+  const rgbRegex = /rgba?\((\d+),\s*(\d+),\s*(\d+)/i;
+  const match = rgbRegex.exec(color);
+  if (match) {
+    return [parseInt(match[1]), parseInt(match[2]), parseInt(match[3])];
+  }
+  return null;
+}
+
+// Helper function to calculate relative luminance
+function getRelativeLuminance(rgb) {
+  const [r, g, b] = rgb.map((component) => {
+    component /= 255;
+    return component <= 0.03928
+      ? component / 12.92
+      : Math.pow((component + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+// Helper function to calculate contrast ratio
+function getContrastRatio(rgb1, rgb2) {
+  const lum1 = getRelativeLuminance(rgb1);
+  const lum2 = getRelativeLuminance(rgb2);
+  const brightest = Math.max(lum1, lum2);
+  const darkest = Math.min(lum1, lum2);
+  return (brightest + 0.05) / (darkest + 0.05);
+}
+
+// Helper function to adjust color to meet minimum contrast ratio
+function adjustColor(foregroundRGB, backgroundRGB, minContrastRatio) {
+  let fg = [...foregroundRGB];
+  let steps = 0;
+  const maxSteps = 10;
+
+  while (getContrastRatio(fg, backgroundRGB) < minContrastRatio && steps < maxSteps) {
+    // Increase the brightness of the text color
+    fg = fg.map((component) => Math.min(component + 10, 255));
+    steps++;
+  }
+
+  // If contrast is still insufficient, invert the text color
+  if (getContrastRatio(fg, backgroundRGB) < minContrastRatio) {
+    fg = foregroundRGB.map((component) => 255 - component);
+  }
+
+  return fg;
+}
+
 function changeFontToTimesNewRoman() {
   chrome.storage.sync.get('changeFont', function(items) {
     if (items.changeFont !== false) {
@@ -82,6 +168,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         }
         if (items.changeFont !== false) {
           changeFontToTimesNewRoman();
+        }
+        if (items.adjustColors !== false) {
+          adjustColorContrast();
         }
         // Include other functions as needed
       }
