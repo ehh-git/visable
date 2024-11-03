@@ -1,13 +1,19 @@
-document.getElementById("stripHtml").addEventListener("click", () => {
-	// Trigger when "stripHtml" button is clicked
-	chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-		// Find the active tab in the current window
-		chrome.scripting.executeScript({
-			target: { tabId: tabs[0].id }, // Injects the script into the active tab
-			function: replaceImagesOnPage, // Call the function to replace images
-		});
-	});
+// popup.js
+
+// Event listener for "Test GPT" button
+document.getElementById("testGptButton").addEventListener("click", () => {
+  console.log("Test GPT button clicked");
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => { 
+    chrome.tabs.sendMessage(tabs[0].id, { action: "gptTest" });
+  });
 });
+
+// Event listener for "Generate Subtext" button
+document.getElementById("generateSubtextButton").addEventListener("click", () => {
+  console.log("Generate Subtext button clicked");
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => { 
+    chrome.tabs.sendMessage(tabs[0].id, { action: "generateSubtext" });
+  });
 
 // Define the function that will replace images on the page
 function replaceImagesOnPage() {
@@ -23,6 +29,7 @@ function replaceImagesOnPage() {
 		img.srcset = newImageUrl;
 	});
 }
+  
 // Event listener for "Test GPT" button
 document.getElementById("testGptButton").addEventListener("click", () => {
 	fetch("http://127.0.0.1:5000/gpt-test", {
@@ -51,6 +58,7 @@ document.getElementById("stripHtmlCSS").addEventListener("click", () => {
 		});
 	});
 });
+  
 function displayRawHTMLAndCSS() {
 	// Function to escape HTML characters
 	function escapeHTML(str) {
@@ -95,7 +103,7 @@ function displayRawHTMLAndCSS() {
 function increaseFontSize() {
 	// Get all elements in the document
 	const allElements = document.querySelectorAll("*");
-
+  
 	allElements.forEach((element) => {
 		// Get the computed style for the element
 		const computedStyle = window.getComputedStyle(element);
@@ -109,13 +117,11 @@ function increaseFontSize() {
 }
 
 // Add this function to execute when "Increase Font Size" button is clicked
-document
-	.getElementById("increaseFontSizeButton")
-	.addEventListener("click", () => {
-		chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-			chrome.scripting.executeScript({
-				target: { tabId: tabs[0].id },
-				function: increaseFontSize,
-			});
-		});
-	});
+document.getElementById("increaseFontSizeButton").addEventListener("click", () => {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    chrome.scripting.executeScript({
+      target: { tabId: tabs[0].id },
+      function: increaseFontSize,
+    });
+  });
+});
