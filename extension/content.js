@@ -5,8 +5,10 @@
 
 // Function to generate subtext for all images on the page
 function generateSubtextForImages() {
-  chrome.storage.sync.get('optimizeImages', (data) => {
-    if (data.optimizeImages !== false) {
+  chrome.storage.sync.get(['optimizeImages', 'optimizeImagesDetail'], function(items) {
+    if (items.optimizeImages !== false) {
+      const detailLevel = items.optimizeImagesDetail || 'medium';
+
       // Get all images on the page
       const images = document.querySelectorAll("img");
 
@@ -14,13 +16,13 @@ function generateSubtextForImages() {
       images.forEach((img) => {
         const imageUrl = img.src;
 
-        // Send the image URL to the server
+        // Send the image URL and detail level to the server
         fetch("http://127.0.0.1:5000/generate-subtext", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ image_url: imageUrl }),
+          body: JSON.stringify({ image_url: imageUrl, detail_level: detailLevel }),
         })
           .then((response) => response.json())
           .then((data) => {
@@ -34,9 +36,12 @@ function generateSubtextForImages() {
           })
           .catch((error) => console.error("Fetch error:", error));
       });
+    } else {
+      console.log('Optimize Images setting is disabled.');
     }
   });
 }
+
 
 // Message Listener
 // ----------------
@@ -89,8 +94,10 @@ function increaseFontSize() {
 // RIGHT HERE IS FOR SIMPLIFY
 // Function to summarize long text content
 function summarizeLongText() {
-  chrome.storage.sync.get('simplifyText', (data) => {
-    if (data.simplifyText !== false) {
+  chrome.storage.sync.get(['simplifyText', 'simplifyTextDetail'], function(items) {
+    if (items.simplifyText !== false) {
+      const detailLevel = items.simplifyTextDetail || 'medium';
+
       // Define the minimum word count to trigger summarization
       const MIN_WORD_COUNT = 50;
 
@@ -131,13 +138,13 @@ function summarizeLongText() {
           if (textNode.processed) return;
           textNode.processed = true;
 
-          // Send the text to the server for summarization
+          // Send the text and detail level to the server for summarization
           fetch("http://127.0.0.1:5000/summarize", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ text: textContent }),
+            body: JSON.stringify({ text: textContent, detail_level: detailLevel }),
           })
             .then((response) => response.json())
             .then((data) => {
@@ -161,6 +168,8 @@ function summarizeLongText() {
 
       // Start walking the document body
       walk(document.body);
+    } else {
+      console.log('Simplify Text setting is disabled.');
     }
   });
 }

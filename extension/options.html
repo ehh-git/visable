@@ -5,23 +5,61 @@
   <meta charset="UTF-8" />
   <title>Extension Settings</title>
   <style>
-    /* Add some basic styling */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h1 {
+      font-size: 24px;
+    }
+    .setting-group {
+      margin-bottom: 20px;
+    }
+    .detail-options label {
+      display: block;
+    }
   </style>
 </head>
 <body>
   <h1>Accessibility Settings</h1>
-  <label>
-    <input type="checkbox" id="optimizeImages" checked />
-    Generate alt text for images
-  </label>
-  <label>
-    <input type="checkbox" id="simplifyText" checked />
-    Simplify complex text
-  </label>
-  <label>
-    <input type="checkbox" id="increaseFontSize" checked />
-    Increase small font sizes
-  </label>
+
+  <!-- Generate Alt Text for Images Setting -->
+  <div class="setting-group">
+    <label>
+      <input type="checkbox" id="optimizeImages" checked />
+      Generate alt text for images
+    </label>
+    <div id="optimizeImagesDetail" class="detail-options">
+      <p>Detail level:</p>
+      <label><input type="radio" name="optimizeImagesDetail" value="short" /> Short</label>
+      <label><input type="radio" name="optimizeImagesDetail" value="medium" checked /> Medium</label>
+      <label><input type="radio" name="optimizeImagesDetail" value="long" /> Long</label>
+    </div>
+  </div>
+
+  <!-- Simplify Complex Text Setting -->
+  <div class="setting-group">
+    <label>
+      <input type="checkbox" id="simplifyText" checked />
+      Simplify complex text
+    </label>
+    <div id="simplifyTextDetail" class="detail-options">
+      <p>Detail level:</p>
+      <label><input type="radio" name="simplifyTextDetail" value="short" /> Short</label>
+      <label><input type="radio" name="simplifyTextDetail" value="medium" checked /> Medium</label>
+      <label><input type="radio" name="simplifyTextDetail" value="long" /> Long</label>
+    </div>
+  </div>
+
+  <!-- Increase Font Size Setting -->
+  <div class="setting-group">
+    <label>
+      <input type="checkbox" id="increaseFontSize" checked />
+      Increase small font sizes
+    </label>
+    <!-- Removed the detail options for increaseFontSize -->
+  </div>
+
   <!-- Add more settings as needed -->
   <script src="options.js"></script>
 </body>
