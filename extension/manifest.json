@@ -3,7 +3,13 @@
   "name": "Basic HTML Converter",
   "version": "1.0",
   "description": "Strips a site to basic HTML for accessibility testing.",
-  "permissions": ["activeTab", "scripting"],
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
   "action": {
     "default_popup": "popup.html"
   },

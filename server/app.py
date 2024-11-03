@@ -8,12 +8,68 @@ import base64
 load_dotenv()
 
 client = OpenAI()
-  
+
 app = Flask(__name__)
 CORS(app)  # This will allow requests from any origin
 
+@app.route("/generate-subtext", methods=["POST"])
+def generate_subtext():
+    data = request.get_json()
+    image_url = data.get("image_url")
+
+    if not image_url:
+        return jsonify({"error": "No image URL provided"}), 400
+
+    try:
+        # Fetch the image from the URL
+        import requests
+        response = requests.get(image_url)
+        response.raise_for_status()
+        image_data = response.content
+
+        # Encode the image as base64
+        base64_image = base64.b64encode(image_data).decode('utf-8')
+
+        # Use the OpenAI API to generate subtext
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "Please generate subtext for the image at this link such that it is ADA compliant. This should mean that the description is sufficient yet concise.",
+                        },
+                        {
+                            "type": "image_url",
+                            "image_url": {
+                                "url": f"data:image/jpeg;base64,{base64_image}"
+                            },
+                        },
+                    ],
+                }
+            ],
+        )
+        message = response.choices[0].message.content.strip()
+        print(message)
+        return jsonify({"subtext": message})
+
+    except Exception as e:
+        print(e)
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route("/gpt-test", methods=["POST"])
 def gpt_test():
+    # Decoding function
+    def encode_image(image_path):
+        with open(image_path, "rb") as image_file:
+            return base64.b64encode(image_file.read()).decode('utf-8')
+    
+    # Getting the base64 string
+    base64_image = encode_image("blind.jpg")
+    
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
@@ -27,7 +83,7 @@ def gpt_test():
                 {
                 "type": "image_url",
                 "image_url": {
-                    "url":  "https://media.istockphoto.com/id/673642938/photo/single-black-male-in-his-30s-smiling-while-commuting-to-work-by-bicycle.jpg?s=612x612&w=0&k=20&c=yBRwkBSYpWXQAGi7LBovd9AmfZrhWp6HqstGVCmKGiA="
+                    "url":  f"data:image/jpeg;base64,{base64_image}"
                 },
                 },
             ],
