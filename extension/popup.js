@@ -1,10 +1,3 @@
-// Event listener for "Strip to Basic HTML" button
-document.getElementById("stripHtml").addEventListener("click", () => {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      chrome.tabs.sendMessage(tabs[0].id, { action: "fetchData" });
-  });
-});
-
 // Event listener for "Test GPT" button
 document.getElementById("testGptButton").addEventListener("click", () => {
   fetch("http://127.0.0.1:5000/gpt-test", {
