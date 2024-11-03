@@ -2,6 +2,27 @@
 
 // Function Definitions
 // --------------------
+function toggleHighContrastMode() {
+  const existingStyle = document.getElementById("high-contrast-style");
+  if (existingStyle) {
+      existingStyle.remove();
+  } else {
+      const style = document.createElement("style");
+      style.id = "high-contrast-style";
+      style.innerHTML = `
+          * {
+              color: #000 !important;
+              background-color: #FFF !important;
+          }
+          a {
+              color: #0000EE !important;
+              text-decoration: underline;
+          }
+      `;
+      document.head.appendChild(style);
+  }
+}
+
 function changeFontToTimesNewRoman() {
 	chrome.storage.sync.get("changeFont", function (items) {
 		if (items.changeFont !== false) {
@@ -111,42 +132,33 @@ function generateBtnLabels() {
 // ----------------
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-	if (request.action === "activateAccessibility") {
-		// Check all settings and activate functions accordingly
-		chrome.storage.sync.get(
-			[
-				"optimizeImages",
-				"simplifyText",
-				"increaseFontSize",
-				"changeFont",
-				"optimizeImagesDetail",
-				"simplifyTextDetail",
-				"optimizeBtns",
-				"optimizeBtnsDetail",
-			],
-			(items) => {
-				if (items.optimizeImages !== false) {
-					generateSubtextForImages();
-				}
-				if (items.simplifyText !== false) {
-					summarizeLongText();
-				}
-				if (items.increaseFontSize !== false) {
-					increaseFontSize();
-				}
-				if (items.changeFont !== false) {
-					changeFontToTimesNewRoman();
-				}
-				if (items.optimizeBtns !== false) {
-					console.log("optimize btn");
-					generateBtnLabels();
-				} else {
-					console.log("Optimize Buttons setting is disabled.");
-				}
-				// Include other functions as needed
-			}
-		);
-	}
+  if (request.action === 'activateAccessibility') {
+    // Check all settings and activate functions accordingly
+    chrome.storage.sync.get(
+      ['optimizeImages', 'simplifyText', 'increaseFontSize', 'changeFont', 'optimizeImagesDetail', 'simplifyTextDetail', "optimizeBtns", "optimizeBtnsDetail",]
+      (items) => {
+        if (items.optimizeImages !== false) {
+          generateSubtextForImages();
+        }
+        if (items.simplifyText !== false) {
+          summarizeLongText();
+        }
+        if (items.increaseFontSize !== false) {
+          increaseFontSize();
+        }
+        if (items.changeFont !== false) {
+          changeFontToTimesNewRoman();
+        }
+        if (items.highContrast !== false) {
+          toggleHighContrastMode();
+        }
+        if (items.optimizeBtns !== false) {
+          generateBtnLabels();
+        // Include other functions as needed
+      }
+    );
+  }
+
 });
 
 // RIGHT HERE IS FOR FONT SIZE
