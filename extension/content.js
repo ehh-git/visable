@@ -133,3 +133,13 @@ function summarizeLongText() {
   // Start walking the document body
   walk(document.body);
 }
+
+// super button
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "activateAccessibility") {
+    generateSubtextForImages();
+    summarizeLongText();
+    // increaseFontSize();
+    // Add other functions as needed
+  }
+});
