@@ -2,6 +2,25 @@
 
 // Function Definitions
 // --------------------
+function changeFontToTimesNewRoman() {
+  chrome.storage.sync.get('changeFont', function(items) {
+    if (items.changeFont !== false) {
+      // Create a new style element
+      const styleElement = document.createElement('style');
+      styleElement.textContent = `
+        * {
+          font-family: "Times New Roman", Times, serif !important;
+        }
+      `;
+      // Append the style element to the head
+      document.head.appendChild(styleElement);
+
+      console.log('Font changed to Times New Roman.');
+    } else {
+      console.log('Change Font setting is disabled.');
+    }
+  });
+}
 
 // Function to generate subtext for all images on the page
 function generateSubtextForImages() {
@@ -47,26 +66,26 @@ function generateSubtextForImages() {
 // ----------------
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "gptTest") {
-    // Handle GPT Test action
-    fetch("http://localhost:5000/gpt-test", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ sample: "data" }),
-    })
-      .then((response) => response.json())
-      .then((data) => console.log("Response from Flask (gpt-test):", data))
-      .catch((error) => console.error("Error in gpt-test fetch:", error));
-  } else if (request.action === "generateSubtext") {
-    // Handle Generate Subtext action
-    console.log("Content script received 'generateSubtext' action");
-    generateSubtextForImages();
-  } else if (request.action === "summarizeContent") {
-    // Handle Summarize Content action
-    console.log("Content script received 'summarizeContent' action");
-    summarizeLongText();
-  } else if (request.action === "increaseFontSize") {
-    increaseFontSize();
+  if (request.action === 'activateAccessibility') {
+    // Check all settings and activate functions accordingly
+    chrome.storage.sync.get(
+      ['optimizeImages', 'simplifyText', 'increaseFontSize', 'changeFont', 'optimizeImagesDetail', 'simplifyTextDetail'],
+      (items) => {
+        if (items.optimizeImages !== false) {
+          generateSubtextForImages();
+        }
+        if (items.simplifyText !== false) {
+          summarizeLongText();
+        }
+        if (items.increaseFontSize !== false) {
+          increaseFontSize();
+        }
+        if (items.changeFont !== false) {
+          changeFontToTimesNewRoman();
+        }
+        // Include other functions as needed
+      }
+    );
   }
 });
 
@@ -173,13 +192,3 @@ function summarizeLongText() {
     }
   });
 }
-
-// super button
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "activateAccessibility") {
-    generateSubtextForImages();
-    summarizeLongText();
-    increaseFontSize();
-    // Add other functions as needed
-  }
-});
