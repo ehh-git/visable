@@ -79,6 +79,14 @@ function increaseFontSize() {
 // Event Listeners
 // ---------------
 
+// Event listener for "Summarize" button
+document.getElementById("summarizeButton").addEventListener("click", () => {
+  console.log("Summarize button clicked");
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    chrome.tabs.sendMessage(tabs[0].id, { action: "summarizeContent" });
+  });
+});
+
 // Event listener for "Test GPT" button
 document.getElementById("testGptButton").addEventListener("click", () => {
   console.log("Test GPT button clicked");
