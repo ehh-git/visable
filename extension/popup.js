@@ -72,8 +72,8 @@ function increaseFontSize() {
         const fontSize = parseFloat(computedStyle.fontSize);
 
         // If font size is less than 20px, set it to 50px
-        if (fontSize && fontSize < 20) {
-          element.style.fontSize = "40px";
+        if (fontSize && fontSize < 16) {
+          element.style.fontSize = "21px";
         }
       });
     }
