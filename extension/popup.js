@@ -61,17 +61,21 @@ function displayRawHTMLAndCSS() {
 
 // Function to increase font size if it is less than 20px
 function increaseFontSize() {
-  // Get all elements in the document
-  const allElements = document.querySelectorAll("*");
+  chrome.storage.sync.get('increaseFontSize', (data) => {
+    if (data.increaseFontSize !== false) {
+      // Get all elements in the document
+      const allElements = document.querySelectorAll("*");
 
-  allElements.forEach((element) => {
-    // Get the computed style for the element
-    const computedStyle = window.getComputedStyle(element);
-    const fontSize = parseFloat(computedStyle.fontSize);
+      allElements.forEach((element) => {
+        // Get the computed style for the element
+        const computedStyle = window.getComputedStyle(element);
+        const fontSize = parseFloat(computedStyle.fontSize);
 
-    // If font size is less than 20px, set it to 50px
-    if (fontSize && fontSize < 20) {
-      element.style.fontSize = "50px";
+        // If font size is less than 20px, set it to 50px
+        if (fontSize && fontSize < 20) {
+          element.style.fontSize = "40px";
+        }
+      });
     }
   });
 }
@@ -118,10 +122,7 @@ document.getElementById("stripHtmlCSS").addEventListener("click", () => {
 document.getElementById("increaseFontSizeButton").addEventListener("click", () => {
   console.log("Increase Font Size button clicked");
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.scripting.executeScript({
-      target: { tabId: tabs[0].id },
-      function: increaseFontSize,
-    });
+    chrome.tabs.sendMessage(tabs[0].id, { action: "increaseFontSize" });
   });
 });
 
@@ -141,4 +142,10 @@ document.getElementById("activateAccessibility").addEventListener("click", () =>
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.tabs.sendMessage(tabs[0].id, { action: "activateAccessibility" });
   });
+});
+
+
+// settings 
+document.getElementById("settingsButton").addEventListener("click", () => {
+  chrome.runtime.openOptionsPage();
 });

@@ -4,8 +4,10 @@
   "version": "1.0",
   "description": "Strips a site to basic HTML for accessibility testing.",
   "permissions": [
+    "storage",
     "activeTab",
-    "scripting"
+    "scripting",
+    "tabs"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -19,6 +21,7 @@
       "js": ["content.js"]
     }
   ],
+  "options_page": "options.html",
   "web_accessible_resources": [
     {
       "resources": ["Images/blind.jpg"],
