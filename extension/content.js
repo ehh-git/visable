@@ -1,22 +1,7 @@
 // content.js
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "gptTest") {
-    // Handle GPT Test action
-    fetch("http://localhost:5000/gpt-test", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ sample: "data" })
-    })
-    .then(response => response.json())
-    .then(data => console.log("Response from Flask (gpt-test):", data))
-    .catch(error => console.error("Error in gpt-test fetch:", error));
-  } else if (request.action === "generateSubtext") {
-    // Handle Generate Subtext action
-    console.log("Content script received 'generateSubtext' action");
-    generateSubtextForImages();
-  }
-});
+// Function Definitions
+// --------------------
 
 // Function to generate subtext for all images on the page
 function generateSubtextForImages() {
@@ -48,3 +33,24 @@ function generateSubtextForImages() {
       .catch((error) => console.error("Fetch error:", error));
   });
 }
+
+// Message Listener
+// ----------------
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "gptTest") {
+    // Handle GPT Test action
+    fetch("http://localhost:5000/gpt-test", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sample: "data" }),
+    })
+      .then((response) => response.json())
+      .then((data) => console.log("Response from Flask (gpt-test):", data))
+      .catch((error) => console.error("Error in gpt-test fetch:", error));
+  } else if (request.action === "generateSubtext") {
+    // Handle Generate Subtext action
+    console.log("Content script received 'generateSubtext' action");
+    generateSubtextForImages();
+  }
+});

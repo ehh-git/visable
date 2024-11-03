@@ -68,7 +68,7 @@ def gpt_test():
             return base64.b64encode(image_file.read()).decode('utf-8')
     
     # Getting the base64 string
-    base64_image = encode_image("blind.jpg")
+    base64_image = encode_image("Drizzle.jpg")
     
     response = client.chat.completions.create(
         model="gpt-4o-mini",
