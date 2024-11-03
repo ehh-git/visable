@@ -90,7 +90,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'activateAccessibility') {
     // Check all settings and activate functions accordingly
     chrome.storage.sync.get(
-      ['optimizeImages', 'simplifyText', 'increaseFontSize', 'changeFont', 'optimizeImagesDetail', 'simplifyTextDetail'],
+      ['optimizeImages', 'simplifyText', 'increaseFontSize', 'changeFont', 'optimizeImagesDetail', 'simplifyTextDetail', 'highContrast'],
       (items) => {
         if (items.optimizeImages !== false) {
           generateSubtextForImages();
