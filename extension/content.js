@@ -90,43 +90,43 @@ function generateSubtextForImages() {
 
 // Function to generate label for all buttons on the page
 function generateBtnLabels() {
-	chrome.storage.sync.get(
-		["optimizeBtns", "optimizeBtnsDetail"],
-		function (items) {
-			if (items.optimizeBtns !== false) {
-				const detailLevel = items.optimizeBtnsDetail || "medium";
+  chrome.storage.sync.get(
+      "optimizeBtns", 
+      function (items) {
+          if (items.optimizeBtns !== false) {
 
-				// Get all images on the page
-				const btns = document.querySelectorAll("button");
+              // Get all buttons on the page
+              const btns = Array.from(document.querySelectorAll("button"));
 
-				// For each image
-				btns.forEach((btn) => {
-					// Send the image URL and detail level to the server
-					fetch("http://127.0.0.1:5000/generate-btn-label", {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify({ detail_level: detailLevel }),
-					})
-						.then((response) => response.json())
-						.then((data) => {
-							if (data.label) {
-								// Set the alt attribute of the image
-								btn.ariaLabel = data.label;
-								console.log(`Updated label for button: ${btn}`);
-							} else {
-								console.error("Optimize btn error:", data.error);
-							}
-						})
-						.catch((error) => console.error("Fetch btn error:", error));
-				});
-			} else {
-				console.log("Optimize Buttons setting is disabled.");
-			}
-		}
-	);
+              // For each button
+              btns.forEach((btn) => {
+                  // Send the button HTML content to the server
+                  fetch("http://127.0.0.1:5000/generate-btn-label", {
+                      method: "POST",
+                      headers: {
+                          "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({ htmlContent: btn.innerHTML }), // Passing HTML content
+                  })
+                      .then((response) => response.json())
+                      .then((data) => {
+                          if (data.label) {
+                              // Set the aria-label attribute of the button
+                              btn.ariaLabel = data.label;
+                              console.log(`Updated label for button: ${btn.innerHTML}`);
+                          } else {
+                              console.error("Optimize btn error:", data.error);
+                          }
+                      })
+                      .catch((error) => console.error("Fetch btn error:", error));
+              });
+          } else {
+              console.log("Optimize Buttons setting is disabled.");
+          }
+      }
+  );
 }
+
 
 // Message Listener
 // ----------------
@@ -135,7 +135,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'activateAccessibility') {
     // Check all settings and activate functions accordingly
     chrome.storage.sync.get(
-      ['optimizeImages', 'simplifyText', 'increaseFontSize', 'changeFont', 'optimizeImagesDetail', 'simplifyTextDetail', "optimizeBtns", "optimizeBtnsDetail",]
+      ['optimizeImages', 'simplifyText', 'increaseFontSize', 'changeFont', 'optimizeImagesDetail', 'simplifyTextDetail', "optimizeBtns"],
       (items) => {
         if (items.optimizeImages !== false) {
           generateSubtextForImages();
@@ -154,6 +154,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         }
         if (items.optimizeBtns !== false) {
           generateBtnLabels();
+        }
         // Include other functions as needed
       }
     );

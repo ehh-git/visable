@@ -3,13 +3,14 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Restore saved settings
   chrome.storage.sync.get(
-    ['optimizeImages', 'simplifyText', 'increaseFontSize', 'changeFont', 'optimizeImagesDetail', 'simplifyTextDetail', 'highContrast', 'optimizeBtns',]
+    ['optimizeImages', 'simplifyText', 'increaseFontSize', 'changeFont', 'optimizeImagesDetail', 'simplifyTextDetail', 'highContrast', 'optimizeBtns'],
     (data) => {
       document.getElementById('optimizeImages').checked = data.optimizeImages !== false;
       document.getElementById('simplifyText').checked = data.simplifyText !== false;
       document.getElementById('increaseFontSize').checked = data.increaseFontSize !== false;
       document.getElementById('changeFont').checked = data.changeFont !== false;
       document.getElementById('highContrast').checked = data.highContrast !== false;
+      document.getElementById('optimizeBtns').checked = data.optimizeBtns !== false;
 
       // Restore detail level selections for optimizeImages
       const optimizeImagesDetail = data.optimizeImagesDetail || 'medium';
@@ -34,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         optimizeImagesDetail: document.querySelector('input[name="optimizeImagesDetail"]:checked').value,
         simplifyTextDetail: document.querySelector('input[name="simplifyTextDetail"]:checked').value,
         highContrast: document.getElementById('highContrast').checked,
+        optimizeBtns: document.getElementById('optimizeBtns').checked,
       });
     });
   });

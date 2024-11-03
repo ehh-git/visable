@@ -112,14 +112,7 @@ def generate_btn_label():
     detail_level = data.get("detail_level", "medium")
 
     # Define prompts based on detail level
-    prompts = {
-        "short": "Please provide a very brief aria-label for the following button to make it ADA compliant. Keep it as concise as possible.",
-        "medium": "Please provide an appropriate aria-label for the following button to make it ADA compliant.",
-        "long": "Please provide a detailed aria-label for the following button to make it ADA compliant. Include as much descriptive information as necessary.",
-    }
-
-    prompt = prompts.get(detail_level, prompts["medium"])
-
+    prompt = {"Please provide a very brief aria-label for the following button to make it ADA compliant. Keep it as concise as possible."}
     try:
         # Use the OpenAI API to generate subtext
         response = client.chat.completions.create(
