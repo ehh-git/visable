@@ -8,17 +8,6 @@ import base64
 load_dotenv()
 
 client = OpenAI()
-
-# Decoding function
-def encode_image(image_path):
-  with open(image_path, "rb") as image_file:
-    return base64.b64encode(image_file.read()).decode('utf-8')
-  
-# Path to your image
-image_path = "path_to_your_image.jpg"
-
-# Getting the base64 string
-base64_image = encode_image("blind.jpg")
   
 app = Flask(__name__)
 CORS(app)  # This will allow requests from any origin
@@ -38,7 +27,7 @@ def gpt_test():
                 {
                 "type": "image_url",
                 "image_url": {
-                    "url":  f"data:image/jpeg;base64,{base64_image}"
+                    "url":  "https://media.istockphoto.com/id/673642938/photo/single-black-male-in-his-30s-smiling-while-commuting-to-work-by-bicycle.jpg?s=612x612&w=0&k=20&c=yBRwkBSYpWXQAGi7LBovd9AmfZrhWp6HqstGVCmKGiA="
                 },
                 },
             ],
@@ -46,9 +35,7 @@ def gpt_test():
         ],
     )
     message = response.choices[0].message.content.strip()
-    print("running first")
     print(message)
-    print("done running")   
     return jsonify({"message": message})
 
 if __name__ == "__main__":
