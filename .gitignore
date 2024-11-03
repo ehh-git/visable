@@ -1,1 +1,5 @@
-venv/
+# virtual enviornment folder
+/venv/
+
+# OPENAI KEY
+/server/.env
