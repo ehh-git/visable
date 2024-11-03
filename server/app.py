@@ -94,5 +94,33 @@ def gpt_test():
     print(message)
     return jsonify({"message": message})
 
+
+@app.route("/summarize", methods=["POST"])
+def summarize():
+    data = request.get_json()
+    text = data.get("text")
+
+    if not text:
+        return jsonify({"error": "No text provided"}), 400
+
+    try:
+        # Use the OpenAI API to summarize the text
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "user",
+                    "content": f"Please simplify and concisely summarize the following text to make it easier to understand:\n\n{text}",
+                }
+            ],
+        )
+        summary = response.choices[0].message.content.strip()
+        print("Summary:", summary)
+        return jsonify({"summary": summary})
+
+    except Exception as e:
+        print(e)
+        return jsonify({"error": str(e)}), 500
+
 if __name__ == "__main__":
     app.run(port=5000)
