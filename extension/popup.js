@@ -103,7 +103,7 @@ function increaseFontSize() {
 
 		// If font size is less than 20px, set it to 25px
 		if (fontSize && fontSize < 20) {
-			element.style.fontSize = "50px";
+			element.style.fontSize = "25px";
 		}
 	});
 }
@@ -119,3 +119,73 @@ document
 			});
 		});
 	});
+
+// Function to get all color values from the page
+function getAllColorValues() {
+	const colorValues = [];
+
+	// Select all elements in the document
+	const allElements = document.querySelectorAll("*");
+
+	allElements.forEach((element) => {
+		// Get the computed style of each element
+		const computedStyle = window.getComputedStyle(element);
+		const textColor = computedStyle.color;
+		const backgroundColor = computedStyle.backgroundColor;
+
+		// Add color values to the list if they aren't already there
+		if (textColor && !colorValues.includes(textColor)) {
+			colorValues.push(textColor);
+		}
+		if (backgroundColor && !colorValues.includes(backgroundColor)) {
+			colorValues.push(backgroundColor);
+		}
+	});
+
+	console.log("Color values on the page:", colorValues);
+}
+
+document.getElementById("testBtn").addEventListener("click", () => {
+	chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+		chrome.scripting.executeScript({
+			target: { tabId: tabs[0].id },
+			function: replaceColorsOnPage,
+		});
+	});
+});
+
+// const colorMap = {
+// 	"rgb(0, 4, 15)": "rgb(25, 25, 112)",
+// 	"rgb(255, 254, 254)": "rgb(245, 245, 245)",
+// 	"rgb(112, 109, 226)": "rgb(60, 60, 220)",
+// 	"rgb(121, 112, 255)": "rgb(90, 90, 210)",
+// 	"rgba(11, 12, 16, 0.733)": "rgba(45, 45, 45, 0.8)",
+// };
+
+function replaceColorsOnPage() {
+	const colorMap = {
+		"rgb(219, 226, 239)": "rgb(150, 150, 150)",
+		"rgb(17, 45, 78)": "rgb(255, 255, 255)",
+		"rgb(63, 114, 175)": "rgb(255, 255, 255)",
+	};
+  
+
+	// Select all elements in the document
+	const allElements = document.querySelectorAll("*");
+
+	allElements.forEach((element) => {
+		// Get the computed style of each element
+		const computedStyle = window.getComputedStyle(element);
+		const textColor = computedStyle.color;
+		const backgroundColor = computedStyle.backgroundColor;
+
+		// Check if the color or background color matches any key in the colorMap and replace if so
+		if (colorMap[textColor]) {
+			element.style.color = colorMap[textColor];
+		}
+		if (colorMap[backgroundColor]) {
+			element.style.backgroundColor = colorMap[backgroundColor];
+		}
+	});
+	console.log("aaaa");
+}
