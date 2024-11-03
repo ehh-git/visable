@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
       // Restore detail level selections for simplifyText
       const simplifyTextDetail = data.simplifyTextDetail || 'medium';
       document.querySelector(`input[name="simplifyTextDetail"][value="${simplifyTextDetail}"]`).checked = true;
+
+      toggleDetailOptions();
     }
   );
 
@@ -43,8 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // No detail options for increaseFontSize and changeFont
   }
 
-  // Initial toggle
-  toggleDetailOptions();
+  // // Initial toggle
+  // toggleDetailOptions();
 
   // Add event listeners to checkboxes
   document.getElementById('optimizeImages').addEventListener('change', toggleDetailOptions);
