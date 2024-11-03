@@ -1,17 +1,22 @@
 {
-    "manifest_version": 3,
-    "name": "Basic HTML Converter",
-    "version": "1.0",
-    "description": "Strips a site to basic HTML for accessibility testing.",
-    "permissions": ["activeTab", "scripting"],
-    "action": {
-      "default_popup": "popup.html"
-    },
-    "content_scripts": [
-      {
-        "matches": ["<all_urls>"],
-        "js": ["content.js"]
-      }
-    ]
-  }
-  
+  "manifest_version": 3,
+  "name": "Basic HTML Converter",
+  "version": "1.0",
+  "description": "Strips a site to basic HTML for accessibility testing.",
+  "permissions": ["activeTab", "scripting"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["Images/blind.jpg"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
