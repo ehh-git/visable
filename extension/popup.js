@@ -135,3 +135,34 @@ document.getElementById("replaceImagesButton")?.addEventListener("click", () => 
     });
   });
 });
+
+// high contrast mode
+document.getElementById("toggleContrast").addEventListener("click", () => {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      chrome.scripting.executeScript({
+          target: { tabId: tabs[0].id },
+          func: toggleHighContrastMode
+      });
+  });
+});
+
+function toggleHighContrastMode() {
+  const existingStyle = document.getElementById("high-contrast-style");
+  if (existingStyle) {
+      existingStyle.remove();
+  } else {
+      const style = document.createElement("style");
+      style.id = "high-contrast-style";
+      style.innerHTML = `
+          * {
+              color: #000 !important;
+              background-color: #FFF !important;
+          }
+          a {
+              color: #0000EE !important;
+              text-decoration: underline;
+          }
+      `;
+      document.head.appendChild(style);
+  }
+}
