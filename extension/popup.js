@@ -1,3 +1,30 @@
+// Event listener for "Strip to Basic HTML" button
+document.getElementById("stripHtml").addEventListener("click", () => {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      chrome.tabs.sendMessage(tabs[0].id, { action: "fetchData" });
+  });
+});
+
+// Event listener for "Test GPT" button
+document.getElementById("testGptButton").addEventListener("click", () => {
+  fetch("http://127.0.0.1:5000/gpt-test", {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json"
+      }
+  })
+  .then(response => response.json())
+  .then(data => {
+      if (data.message) {
+          console.log("Response from GPT:", data.message);
+      } else {
+          console.error("Error from server:", data.error);
+      }
+  })
+  .catch(error => console.error("Fetch error:", error));
+});
+
+// Event listener for "Perform Action" button
 document.getElementById("stripHtmlCSS").addEventListener("click", () => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.scripting.executeScript({
@@ -7,6 +34,7 @@ document.getElementById("stripHtmlCSS").addEventListener("click", () => {
   });
 });
 
+// Function to replace the page with combined HTML and CSS content
 function replaceWithRawHTMLAndCSS() {
   // Function to escape HTML characters
   function escapeHTML(str) {
