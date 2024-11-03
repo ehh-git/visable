@@ -133,17 +133,3 @@ function summarizeLongText() {
   // Start walking the document body
   walk(document.body);
 }
-
-
-// Update the message listener
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "gptTest") {
-    // Existing code...
-  } else if (request.action === "generateSubtext") {
-    // Existing code...
-  } else if (request.action === "summarizeContent") {
-    // Handle Summarize Content action
-    console.log("Content script received 'summarizeContent' action");
-    summarizeLongText();
-  }
-});
