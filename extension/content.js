@@ -2,6 +2,27 @@
 
 // Function Definitions
 // --------------------
+function toggleHighContrastMode() {
+  const existingStyle = document.getElementById("high-contrast-style");
+  if (existingStyle) {
+      existingStyle.remove();
+  } else {
+      const style = document.createElement("style");
+      style.id = "high-contrast-style";
+      style.innerHTML = `
+          * {
+              color: #000 !important;
+              background-color: #FFF !important;
+          }
+          a {
+              color: #0000EE !important;
+              text-decoration: underline;
+          }
+      `;
+      document.head.appendChild(style);
+  }
+}
+
 function changeFontToTimesNewRoman() {
   chrome.storage.sync.get('changeFont', function(items) {
     if (items.changeFont !== false) {
@@ -82,6 +103,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         }
         if (items.changeFont !== false) {
           changeFontToTimesNewRoman();
+        }
+        if (items.highContrast !== false) {
+          toggleHighContrastMode();
         }
         // Include other functions as needed
       }
