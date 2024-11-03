@@ -16,6 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
       // Restore detail level selections for simplifyText
       const simplifyTextDetail = data.simplifyTextDetail || 'medium';
       document.querySelector(`input[name="simplifyTextDetail"][value="${simplifyTextDetail}"]`).checked = true;
+
+      // Initial toggle to hide detail options if checkboxes are not checked
+      toggleDetailOptions();
     }
   );
 
