@@ -22,6 +22,7 @@ function replaceImagesOnPage() {
     img.src = newImageUrl;
     img.srcset = newImageUrl;
   });
+}
 // Event listener for "Test GPT" button
 document.getElementById("testGptButton").addEventListener("click", () => {
   fetch("http://127.0.0.1:5000/gpt-test", {
