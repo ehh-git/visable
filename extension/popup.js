@@ -90,3 +90,32 @@ function displayRawHTMLAndCSS() {
 	document.write(rawHTMLAndCSS);
 	document.close();
 }
+
+// Function to increase font size if it is less than 20px
+function increaseFontSize() {
+	// Get all elements in the document
+	const allElements = document.querySelectorAll("*");
+
+	allElements.forEach((element) => {
+		// Get the computed style for the element
+		const computedStyle = window.getComputedStyle(element);
+		const fontSize = parseFloat(computedStyle.fontSize);
+
+		// If font size is less than 20px, set it to 25px
+		if (fontSize && fontSize < 20) {
+			element.style.fontSize = "50px";
+		}
+	});
+}
+
+// Add this function to execute when "Increase Font Size" button is clicked
+document
+	.getElementById("increaseFontSizeButton")
+	.addEventListener("click", () => {
+		chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+			chrome.scripting.executeScript({
+				target: { tabId: tabs[0].id },
+				function: increaseFontSize,
+			});
+		});
+	});
