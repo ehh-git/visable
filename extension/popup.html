@@ -2,69 +2,71 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Chrome Extension</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font */
-            background-color: #f0f4f8; /* Soft pastel background */
-            color: #333; /* Dark text for readability */
-            margin: 0;
-            padding: 20px;
-            width: 300px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>My Chrome Extension</title>
+		<style>
+			body {
+				font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; /* Modern font */
+				background-color: #f0f4f8; /* Soft pastel background */
+				color: #333; /* Dark text for readability */
+				margin: 0;
+				padding: 20px;
+				width: 300px;
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+			}
 
-        h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
-            color: #5c6bc0; /* Pastel blue */
-            text-align: center;
-        }
+			h1 {
+				font-size: 24px;
+				margin-bottom: 10px;
+				color: #5c6bc0; /* Pastel blue */
+				text-align: center;
+			}
 
-        p {
-            font-size: 14px;
-            line-height: 1.5;
-            margin: 10px 0;
-            text-align: center;
-        }
+			p {
+				font-size: 14px;
+				line-height: 1.5;
+				margin: 10px 0;
+				text-align: center;
+			}
 
-        button {
-            background-color: #97a1fc; /* Soft coral color */
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            display: block;
-            margin: 0 auto;
-        }
+			button {
+				background-color: #97a1fc; /* Soft coral color */
+				color: white;
+				border: none;
+				border-radius: 5px;
+				padding: 10px 20px;
+				font-size: 16px;
+				cursor: pointer;
+				transition: background-color 0.3s;
+				display: block;
+				margin: 0 auto;
+			}
 
-        button:hover {
-            background-color: #7985dd; /* Darker coral on hover */
-        }
+			button:hover {
+				background-color: #7985dd; /* Darker coral on hover */
+			}
 
-        footer {
-            margin-top: 20px;
-            text-align: center;
-            font-size: 12px;
-            color: #777;
-        }
-    </style>
-</head>
-<body>
-    <h1>My Extension</h1>
-    <p>Make your website ADA compliant</p>
-    <button id="testGptButton">Test GPT</button> <!-- New button -->
-    <button id="stripHtmlCSS">ClarifEYE</button>
-    <button id="stripHtml">Image Replace</button>
-    <footer>
-        <p>&copy; 2024 My Chrome Extension</p>
-    </footer>
-    <script src="popup.js"></script>
-</body>
+			footer {
+				margin-top: 20px;
+				text-align: center;
+				font-size: 12px;
+				color: #777;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>My Extension</h1>
+		<p>Make your website ADA compliant</p>
+		<button id="testGptButton">Test GPT</button>
+		<!-- New button -->
+		<button id="stripHtmlCSS">ClarifEYE</button>
+		<button id="stripHtml">Image Replace</button>
+		<button id="increaseFontSizeButton">Increase Font Size</button>
+		<footer>
+			<p>&copy; 2024 My Chrome Extension</p>
+		</footer>
+		<script src="popup.js"></script>
+	</body>
 </html>
