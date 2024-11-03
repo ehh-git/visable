@@ -1,2 +1,5 @@
-venv/
-**/.DS_Store
+# virtual enviornment folder
+/venv/
+
+# OPENAI KEY
+/server/.env
