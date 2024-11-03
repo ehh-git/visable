@@ -2,7 +2,7 @@
 /venv/
 
 # OPENAI KEY
-**/.env
+/server/.env
 
 # mac specific
 **/.DS_Store
