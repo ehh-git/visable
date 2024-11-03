@@ -1,0 +1,8 @@
+# virtual enviornment folder
+/venv/
+
+# OPENAI KEY
+/server/.env
+
+# mac specific
+**/.DS_Store
