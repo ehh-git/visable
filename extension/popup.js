@@ -1,3 +1,4 @@
+
 // Event listener for "Test GPT" button
 document.getElementById("testGptButton").addEventListener("click", () => {
   fetch("http://127.0.0.1:5000/gpt-test", {
@@ -22,13 +23,12 @@ document.getElementById("stripHtmlCSS").addEventListener("click", () => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.scripting.executeScript({
       target: { tabId: tabs[0].id },
-      function: replaceWithRawHTMLAndCSS,
+      function: displayRawHTMLAndCSS,
     });
   });
 });
 
-// Function to replace the page with combined HTML and CSS content
-function replaceWithRawHTMLAndCSS() {
+function displayRawHTMLAndCSS() {
   // Function to escape HTML characters
   function escapeHTML(str) {
     return str
@@ -58,10 +58,43 @@ function replaceWithRawHTMLAndCSS() {
     .join("\n");
 
   // Combine HTML and CSS into a single string
-  const combinedContent = `<html>\n<head>\n<style>\n${styles}\n</style>\n</head>\n<body>\n<pre style="overflow: auto; white-space: pre-wrap; width: 100%; height: 100vh; margin: 0;">${escapeHTML(rawHTML)}</pre>\n</body>\n</html>`;
+  const combinedContent = `<html>\n<head>\n<style>\n${styles}\n</style>\n</head>\n<body>\n<pre>${escapeHTML(rawHTML)}</pre>\n</body>\n</html>`;
 
-  // Replace the entire document with the combined content
-  document.open();
-  document.write(combinedContent);
-  document.close();
+  // Create a full-screen overlay to display the combined content
+  const overlay = document.createElement('div');
+  overlay.style.position = 'fixed';
+  overlay.style.top = '0';
+  overlay.style.left = '0';
+  overlay.style.width = '100%';
+  overlay.style.height = '100%';
+  overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+  overlay.style.color = 'white';
+  overlay.style.overflow = 'auto';
+  overlay.style.padding = '20px';
+  overlay.style.zIndex = '9999';
+  overlay.style.fontFamily = 'monospace';
+  overlay.style.fontSize = '14px';
+
+  // Add close button to the overlay
+  const closeButton = document.createElement('button');
+  closeButton.innerText = 'Close';
+  closeButton.style.position = 'absolute';
+  closeButton.style.top = '20px';
+  closeButton.style.right = '20px';
+  closeButton.style.backgroundColor = 'red';
+  closeButton.style.color = 'white';
+  closeButton.style.border = 'none';
+  closeButton.style.padding = '10px';
+  closeButton.style.cursor = 'pointer';
+
+  closeButton.addEventListener('click', () => {
+    document.body.removeChild(overlay);
+  });
+
+  // Set the content of the overlay
+  overlay.innerHTML = `<pre>${escapeHTML(combinedContent)}</pre>`;
+  overlay.appendChild(closeButton);
+
+  // Append the overlay to the body
+  document.body.appendChild(overlay);
 }
