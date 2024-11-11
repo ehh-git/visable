@@ -1,3 +1,6 @@
+# app.py 
+# Uses OpenAI to generate alt texts for images based on specified level of detail 
+# Summarizes text based on desired length
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from openai import OpenAI
@@ -6,7 +9,6 @@ import base64
 
 # Load environment variables
 load_dotenv()
-
 client = OpenAI()
 
 app = Flask(__name__)
